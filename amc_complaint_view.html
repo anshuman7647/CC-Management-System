@@ -1,0 +1,146 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<title>Complaint Management</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+   <script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body onload="a()">
+  
+
+
+<script type="text/javascript">
+
+  document.addEventListener("deviceready", function(){ 
+                db = window.openDatabase("UserDb", "1.0", "Cordova Demo", 200000);
+
+                var len=0;
+                db.transaction(function(tx){
+                	
+                	tx.executeSql('Select * from CompTable',[],function(tx,results){
+                	len = results.rows.length;
+                	console.log(len);
+                	alert(len);
+                	console.log(results);
+                	var table = document.getElementById("table");
+					var tbody = document.querySelector("#tbody");
+					for(var i=1;i<=len;i++){
+						var row = tbody.insertRow(-1);
+						var cell1 = row.insertCell(0);
+						var cell2 = row.insertCell(1);
+						var cell3 = row.insertCell(2);
+						// var cell4 = row.insertCell(3);
+						var cell5 = row.insertCell(3);
+						var cell6 = row.insertCell(4);
+						var cell7 = row.insertCell(5);
+						
+
+						cell1.innerHTML = results.rows.item(i-1).ID;
+						// cell1.innerHTML = "<a href='"+ token +"' >"+ token +"</a>";
+						cell2.innerHTML="<a href='amc_user_comp_details_view.html' onclick='window.sessionStorage.setItem(\"Complaint_num\",this.innerHTML)'>"+results.rows.item(i-1).compNum;+"</a>"
+				
+						cell3.innerHTML = results.rows.item(i-1).firstname;
+						// cell4.innerHTML = results.rows.item(i-1).email;
+						cell5.innerHTML = results.rows.item(i-1).complaint_type;
+						cell6.innerHTML = results.rows.item(i-1).complaintdescp;
+					    cell7.innerHTML = results.rows.item(i-1).compStatus;
+					}
+
+                	});
+                },function(error){
+                	alert('Transaction ERROR: ' + error.message);
+                });
+                console.log(len);
+            }, false);
+
+
+  // function getlogout_success(){
+  //     window.sessionStorage.removeItem("loggedIn");
+  //     window.sessionStorage.removeItem("firstname");
+  //     window.sessionStorage.removeItem("username");
+
+  //     location.replace("index.html");
+      
+  //   }
+	
+</script>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <div class="navbar-toggle collapsed " style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; border: none;">
+        <div>
+         <a class="navbar-brand" id="usernn" style="color: white;  display: inline; float: right;  " ></a>  
+       </div>
+      </div>
+      
+      <a class="navbar-brand" href="amc_complaint_view.html">ADRDE</a>
+     </div>
+    
+    <div class="collapse navbar-collapse" id="myNavbar" >
+
+    
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a  onclick="getlogout_success();" style="cursor: pointer;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        
+      </ul>
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand" id="usern" style="color: white;  display: inline;float: right;" ></a>
+        </div>
+    </div>
+  </div>
+</nav>
+<br>
+ <center>
+   	<h1>Complaint Management </h1>
+   </center>
+
+<div class="container" style="margin-top: 50px; ">
+	<table class="table table-striped" id="table">
+		<thead>
+			<tr >
+				<th>ID</th>
+				<th>Comp. No.</th>
+				<th>Name</th>
+				<!-- <th>E-mail</th> -->
+				<th>Comp. Type</th>
+				<th>Comp Desc.</th>
+				<th>Comp. Status</th>
+			</tr>
+		</thead>
+		
+		<tbody id="tbody">
+					
+		</tbody>
+
+		<tfoot>
+			
+		</tfoot>
+	</table>
+
+</div>
+
+
+
+
+</body>
+</html>

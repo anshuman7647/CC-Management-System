@@ -1,0 +1,95 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<title>ADRDE Complaint Portal</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+	<script type="text/javascript" src="js/cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="js/common.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body onload="a()">
+  
+
+<nav class="navbar navbar-inverse" style="margin-bottom: 0px;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <div class="navbar-toggle collapsed " style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; border: none;">
+        <div>
+         <a class="navbar-brand" id="usernn" style="color: white;  display: inline; float: right;  " ></a>  
+       </div>
+      </div>
+      
+      <a class="navbar-brand" href="user_view.html">ADRDE</a>
+     </div>
+    
+    <div class="collapse navbar-collapse" id="myNavbar" >
+
+     
+    <!--   <ul class="nav navbar-nav">
+     <li> <a id="usern" style="color: white; float: right;">fds</a></li>
+    </ul> -->
+    <ul class="nav navbar-nav">   
+            
+            <li><a href="group_complaint.html">Register New Complaint</a></li>
+            <li><a href="user_complaint_view.html">View Complaint Status</a></li>
+        
+      </ul>  
+
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a  onclick="getlogout_success();" style="cursor: pointer;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        
+      </ul>
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand" id="usern" style="color: white;  display: inline;float: right;" ></a>
+        </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="bghome">
+  </div>
+ <div class="ab">
+<div class="container" style="padding-right: 45px;">
+  
+<h2>About Lab</h2>
+<br>
+
+Aerial Delivery Research & Development Establishment Agra made a humble beginning at Kanpur during the later part of 1950s, consisting of two Aerial Delivery Sections, namely - Chief Inspectorate of Textiles & Clothing (CIT & C) and Chief Inspectorate of General Stores (CIGS) under the control of Director General of Inspection (DGI).<br><br>
+
+Primarily, these two sections were responsible for the indigenisation of parachutes and related equipment's for paradropping of men and materials. Subsequently, these sections moved over to Agra during 1965 and transfigured into a full-fledged establishment called Chief Inspectorate of Aerial Delivery Equipment (CIADE). This DGI establishment came under the fold of DRDO in May 1968 and ADRDE was established in January 1969 at Agra.<br><br>
+
+The charter of duties of the establishment also got revised which included development of Heavy Dropping System, Brake Parachute System and Towed
+ Target System. Thus, the lab which started as two small sections in the Textile & Clothing and General Stores Group underwent a series of transformations, expansions & matured into a R&D Establishment under DRDO.<br><br>
+
+During the resurgence of DRDO in 1980s, the activities of this establishment were reviewed and ADRDE was brought under cover of Directorate of Aeronautics. With this, the scope of activities of ADRDE widened further to include programs like Aircraft Arrester Barrier, Air Cushion Vehicle and Balloon Technology. During last two decades ADRDE has taken up projects on Paratrooper's parachute systems, Cargo and Heavy equipment dropping systems, Aircraft brake parachute system, Armament Delivery parachute, Recovery parachute system, Balloon Barrage & Surveillance system, Aerostat of small and medium class capacities and recently on Airship and related applications.<br><br>
+
+This establishment is poised to meet the ever increasing requirements of the Services & Space organisations by developing state-of-the-art systems.<br><br>
+
+
+  </div>
+
+</div>
+
+
+
+</body>
+</html>

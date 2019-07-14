@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Home</title>
+    <!-- <script type="text/javascript" src="js/common.js"></script> -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/index.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body onload="a()">
+<script>
+  function a(){
+   
+     var username=window.sessionStorage.getItem("firstname");
+     document.getElementById("usern").innerHTML = username;
+      document.getElementById("usernn").innerHTML = username;
+
+  }
+  function getlogout_success(){
+      window.sessionStorage.removeItem("loggedIn");
+      window.sessionStorage.removeItem("firstname");
+      window.sessionStorage.removeItem("username");
+
+      location.replace("index.html");
+      
+    }
+</script>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <div class="navbar-toggle collapsed " style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; border: none;">
+        <div>
+         <a class="navbar-brand" id="usernn" style="color: white;  display: inline; float: right;  " ></a>  
+       </div>
+      </div>
+      
+      <a class="navbar-brand" href="home.html">ADRDE</a>
+     </div>
+    
+    <div class="collapse navbar-collapse" id="myNavbar" >
+
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">File Management <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="file_management.html">Add Details</a></li>
+            <li><a href="Search.html">Search</a></li>
+          </ul>
+        </li>
+       <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Leave Status<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="leave_records.html">Register Leave</a></li>
+            <li><a href="manage_leave.html">Manage Leaves</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Training Records <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="training_rec.html">Enter Employee Training Details</a></li>
+              <li><a href="viewTrainingRec.html">View Employee Training Records</a></li>
+            <li><a href="trainee.html">Enter Trainee Details</a></li>
+            <li><a href="viewTraineeRec.html">View Trainee Record</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">DRONA & Internet <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="internet_status.html">DRONA & Internet Status Log</a></li>
+            <li><a href="view_internet_status.html">View Internet Status Log</a></li>
+          </ul>
+        </li>
+
+
+
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Group Management <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="group_running.html">Group Running Demands</a></li>
+            <li><a href="admin_comp_view.html">View Complaints</a></li>
+          </ul>
+        </li>
+      </ul> 
+    <!--   <ul class="nav navbar-nav">
+     <li> <a id="usern" style="color: white; float: right;">fds</a></li>
+    </ul> -->
+
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a  onclick="getlogout_success();" style="cursor: pointer;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        
+      </ul>
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand" id="usern" style="color: white;  display: inline;float: right;" ></a>
+        </div>
+    </div>
+  </div>
+</nav>
+  
+ 
+
+<center>
+  <div class="form-body">
+    <div class="comp-form">
+    <div class="comp-form-head">
+      <p id="form-top"> Welcome to Video Conferencing Record</p>
+    </div>
+    <form>
+    <div class="cname">
+        <p id="vc-date" class="txt_name">VC Date</p> 
+            </div>
+        <div class="comp-form-name">
+        <input type="date" name="vdate" placeholder="Enter Your VC Date" id="vc_date" required="" class="name">
+      </div>
+
+    <div class="cname">
+        <p id="vc-name" class="txt_name">Officer Name</p> 
+            </div>
+        <div class="comp-form-name">
+        <input type="text" name="fname" placeholder="Enter Officer Name" id="vc_name" required="" class="name">
+      </div>
+
+    <div class="cname" >
+        <p id="vc-lname">Lab Name</p>
+            </div>
+            <div class="comp-form-name">
+        <input type="text" placeholder="Enter your Lab Name" id="vc_lname" class="name">
+      </div>
+
+    <div class="cname" >
+        <p id="vc-time">VC Time</p>
+            </div>
+            <div class="comp-form-name">
+        <input type="time" placeholder="Enter VC Time" id="vc_time" class="name">
+      </div>
+
+    <div class="cname">
+        <p id="vc-rem" class="txt_name">Remark</p> 
+            </div>
+        <div class="comp-form-name">
+        <input type="text" name="fname" placeholder="Enter Remarks Here..." id="vc_rem" required="" class="name">
+      </div>
+
+
+    <div class="reg-form-submission">
+        <center>
+        <input type="submit" value="SUBMIT"  id="submit" class="btnsubmit" onclick ="#">
+                 <input type="submit" value="BACK"  id="submit" class="btnsubmit" onclick="window.location.href='home.html'">
+        </center>
+      </div>
+      </form>     
+  </div>  </div>  
+    </center>
+
+</body>
+</html>
+

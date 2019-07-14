@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Search Files</title>
+    <script type="text/javascript" src="js/common.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/index.css" />
+   <script type="text/javascript" src="js/cordova.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body onload="a()">
+  <script>
+  function a(){
+    var username=window.sessionStorage.getItem("firstname");
+    document.getElementById("usern").innerHTML = username;
+    document.getElementById("usernn").innerHTML = username;
+}
+var db = null, ID=0;
+document.addEventListener("deviceready", function show_all(){ 
+        db = window.openDatabase("UserDb", "1.0", "Cordova Demo", 200000);
+        db.transaction(function(tx){
+          tx.executeSql('Select * from FileTable',[],function(tx,results){
+          var len = results.rows.length;
+          var Sno = 0;
+          console.log(len);
+          console.log(results);
+          var table = document.getElementById("table");
+          var tbody = document.querySelector("#tbody");
+          for(var i=1;i<=len;i++){
+            var row = tbody.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            var cell6 = row.insertCell(5);
+            Sno += 1;
+            cell1.innerHTML = Sno;
+            cell2.innerHTML = results.rows.item(i-1).filenum;
+            cell3.innerHTML = results.rows.item(i-1).volume;
+            cell4.innerHTML = results.rows.item(i-1).docnum;
+            cell5.innerHTML = results.rows.item(i-1).docname;
+            cell6.innerHTML = results.rows.item(i-1).docdate;
+        }
+
+      });
+    },function(error){
+    alert('Transaction ERROR: ' + error.message);
+    });
+        
+    }, false);
+
+
+function search_file(){
+  var filenum=document.getElementById("filenum").value;
+  var keyword = document.querySelector('#keyword').value.toLowerCase();
+  var strQuery,list;
+  list = keyword.split(' ');
+  if(filenum!="" && keyword==""){
+    strQuery = 'Select * from FileTable where filenum="'+filenum+'";';
+  }
+  else if(filenum!="" && keyword!=""){    
+    strQuery = 'Select * from FileTable where filenum="'+filenum+'" and (';
+    console.log(list);
+    for(var i=0;i<list.length-1;i++){
+      strQuery += 'LOWER(docname) LIKE "%'+ list[i]+'%" OR ';
+    }
+    strQuery += 'LOWER(docname) LIKE "%'+ list[list.length - 1]+'%")';
+  }
+  else if(filenum=="" && keyword!=""){
+    strQuery = 'Select * from FileTable where ';
+    console.log(list);
+    for(var i=0;i<list.length-1;i++){
+      strQuery += 'LOWER(docname) LIKE "%'+ list[i]+'%" OR ';
+    }
+    strQuery += 'LOWER(docname) LIKE "%'+ list[list.length - 1]+'%"';
+  }
+  else{
+    return false;
+  }
+  db.transaction(function(tx){
+    tx.executeSql(strQuery,[],function(tx,results){
+      var len = results.rows.length;
+      var Sno = 0;
+      console.log(len);
+      console.log(results);
+      var table = document.getElementById("table");
+      var tbody = document.querySelector("#tbody");
+      var thead = document.querySelector('#thead');
+      tbody.innerHTML = "";
+      if(len==0){
+        thead.innerHTML = "<h3>No records found!</h3><h5>Try some other keywords...</h5>"
+        return false;
+      }
+      else{
+        thead.innerHTML = "<tr><th>S.No.</th><th>File Number</th><th>Volume Number</th><th>Document Number</th><th>Document Name</th><th>Document Date</th></tr>";
+        for(var i=1;i<=len;i++){
+        var row = tbody.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        Sno += 1;
+        cell1.innerHTML = Sno;
+        cell2.innerHTML = results.rows.item(i-1).filenum;
+        cell3.innerHTML = results.rows.item(i-1).volume;
+        cell4.innerHTML = results.rows.item(i-1).docnum;
+        cell5.innerHTML = results.rows.item(i-1).docname;
+        cell6.innerHTML = results.rows.item(i-1).docdate;
+      }
+      }
+      
+
+    });
+  },function(error){
+  alert('Transaction ERROR: ' + error.message);
+  });
+}
+
+
+</script>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <div class="navbar-toggle collapsed " style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; border: none;">
+        <div>
+         <a class="navbar-brand" id="usernn" style="color: white;  display: inline; float: right;  " ></a>  
+       </div>
+      </div>
+      
+      <a class="navbar-brand" href="home.html">ADRDE</a>
+     </div>
+    
+    <div class="collapse navbar-collapse" id="myNavbar" >
+
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">File Management <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="file_management.html">Add Details</a></li>
+            <li><a href="search.html">Search</a></li>
+          </ul>
+        </li>
+       <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Leave Status<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="leave_records.html">Register Leave</a></li>
+            <li><a href="manage_leave.html">Manage Leaves</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Training Records <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="training_rec.html">Enter Employee Training Details</a></li>
+              <li><a href="viewTrainingRec.html">View Employee Training Records</a></li>
+            <li><a href="trainee.html">Enter Trainee Details</a></li>
+            <li><a href="viewTraineeRec.html">View Trainee Record</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">DRONA & Internet <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="internet_status.html">DRONA & Internet Status Log</a></li>
+            <li><a href="view_internet_status.html">View Internet Status Log</a></li>
+          </ul>
+        </li>
+
+
+
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Group Management <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="group_running.html">Group Running Demands</a></li>
+            <li><a href="admin_comp_view.html">View Complaints</a></li>
+          </ul>
+        </li>
+      </ul> 
+    <!--   <ul class="nav navbar-nav">
+     <li> <a id="usern" style="color: white; float: right;">fds</a></li>
+    </ul> -->
+
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a  onclick="getlogout_success();" style="cursor: pointer;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        
+      </ul>
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand" id="usern" style="color: white;  display: inline;float: right;" ></a>
+        </div>
+    </div>
+  </div>
+</nav>
+  
+
+<div class="form-body" style="background:none;">
+  <div class="container">
+    <center>
+    <div class="comp-form">
+     
+        <h1>Search Your File</h1>
+    
+      <div class="cname">
+        <p id="fm-no" class="txt_name"></p> 
+      </div>
+      
+      <div class="comp-form-name" style="display: inline;">
+      <!-- <input type="text" name="fname" placeholder="Enter Name of File...." id="file_name" required="" class="name" style="width:550px;"/> -->
+        <select name="filenum" id="filenum" required="" class="name" style="margin-bottom: 5px;">
+        <option value="">--Select a File--</option>
+        <option value="ADRDE/QMS/MISG/CC/01">ADRDE/QMS/MISG/CC/01</option>
+        <option value="ADRDE/QMS/MISG/CC/02">ADRDE/QMS/MISG/CC/02</option>
+        <option value="ADRDE/QMS/MISG/CC/03">ADRDE/QMS/MISG/CC/03</option>
+        <option value="ADRDE/QMS/MISG/CC/04">ADRDE/QMS/MISG/CC/04</option>
+        </select>
+
+      </div >
+      <div class="comp-form-name" style="display: inline;">
+        <input type="text" name="fname" placeholder="Enter keyword..." id="keyword" class="name">
+        
+      </div>
+      <div>
+        <input type="submit" value="Search"  id="search" class="btnsubmit" onclick="search_file()">
+      </div>
+    
+    </div>
+  </center>
+  </div>  
+  </div>
+  <div class="container" style="overflow: auto;position: relative;top: 300px;">
+  
+    <table class="table table-striped" id="table">
+    <thead id="thead">
+    <tr>
+    <th>S.No.</th>
+    <th>File No.</th>
+    <th>Vol. No.</th>
+    <th>Doc. No.</th>
+    <th>Doc. Name</th>
+    <th>Doc. Date</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+
+    <tfoot>
+
+    </tfoot>
+    </table>
+
+  
+</div>  
+
+
+</body>
+</html>

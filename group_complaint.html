@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Register Complaint</title>
+     <script type="text/javascript" src="js/common.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<script type="text/javascript" src="js/cordova.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script type="text/javascript">
+ 
+
+            var db = null, ID=0;
+            
+            document.addEventListener(     "deviceready", function(){ 
+                db = window.openDatabase("UserDb", "1.0", "Cordova Demo", 200000);
+                //db = window.sqlitePlugin.openDatabase({name: 'UserDb', location: 'default'});
+                // alert("db opened");
+                //default: Library/LocalDatabase subdirectory - NOT visible to iTunes and NOT backed up by iCloud
+                //Library: Library backed up by iCloud, NOT visible to iTunes
+                //Documents: Documents visible to iTunes and backed up by iCloud
+
+
+                //For upgrade logic please check my existing video from below url
+                //http://infologs.in/ or http://youtube.com/webboostings/
+                db.transaction(function(tx) {
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS CompTable (ID INTEGER PRIMARY KEY AUTOINCREMENT, firstname VARCHAR2(30), email VARCHAR2(50), complaint_type VARCHAR2(30), complaintdescp VARCHAR2(300), compStatus VARCHAR2(20), compNum VARCHAR2(20))');                    
+                }, function(error) {
+                    alert('Transaction ERROR: ' + error.message);
+                }, function() {
+                    alert("Database has been generated successfully.");
+                });
+            }, false);
+
+            function xyz()
+            {
+                Reg_Comp_Now();
+            }
+            function Reg_Comp_Now()
+            {
+
+
+            	var name = document.getElementById("c_fname").value;
+                var email = document.getElementById("c_email").value;
+                var ctype = document.getElementById("ctype");
+                var complaint_type=ctype.options[ctype.selectedIndex].value;
+                // console.log(complaint_type);
+                var complaintdescp = document.getElementById("cdesc").value;
+
+                //if(paswrd==cpaswrd){
+              
+                var status = "Initiated and not seen";
+                var params = [name, email, complaint_type, complaintdescp,status];
+                var strQuery = 'INSERT INTO CompTable VALUES (NULL,?,?,?,?,?,NULL)';
+                // var strQuery ="DROP TABLE RegTable";
+                
+                 db.transaction(function(tx) { 
+                    tx.executeSql(strQuery,params,function(tx,results){
+                        //alert("Complaint registered successfully");
+                        console.log(results);
+                       tx.executeSql('Select ID from CompTable ORDER BY ID DESC LIMIT 1;',[],function(tx,results){
+                          var gname = window.sessionStorage.getItem('gname');
+                          var id = results.rows.item(0).ID;
+                          console.log(results);
+                          console.log(id);
+                          var compname = gname + '/' + id;
+                          console.log(compname);
+                          tx.executeSql('UPDATE CompTable SET compNum = "'+compname+'"WHERE ID=(SELECT max(ID) from CompTable);',[],function(){
+                              alert("Your Complaint is Registered.\n\nComplaint number: "+compname+"\n\nKindly note the complaint number for future reference.");
+                          });
+                      });
+                      window.location= "user_view.html";
+                    });
+                    
+
+                }, function(error) {
+                    alert('Transaction ERROR: ' + error.message);
+
+
+                
+                }, function(){
+                  alert("Complaint registered successfully");
+                  window.location= "user_view.html";
+
+                });
+               
+            
+             //}
+ 
+             /*else{
+             	alert('password and confirm password should be same.');
+             }*/
+            }
+          
+
+            function fill(){
+                var fname = window.sessionStorage.getItem("firstname");
+                var lname = window.sessionStorage.getItem("lastname");
+                var email1 = window.sessionStorage.getItem("username");
+                document.getElementById("c_fname").value = fname + " " + lname;
+                document.getElementById("c_email").value = email1 ;
+                var username=window.sessionStorage.getItem("firstname");
+                document.getElementById("usern").innerHTML = username;
+                document.getElementById("usernn").innerHTML = username;
+            }
+
+</script>
+
+<body style="margin:0px 0px 0px 0px; " onload="fill(),a()">
+
+<nav class="navbar navbar-inverse" style="margin-bottom: 0px;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <div class="navbar-toggle collapsed " style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; border: none;">
+        <div>
+         <a class="navbar-brand" id="usernn" style="color: white;  display: inline; float: right;  " ></a>  
+       </div>
+      </div>
+      
+      <a class="navbar-brand" href="user_view.html">ADRDE</a>
+     </div>
+    
+    <div class="collapse navbar-collapse" id="myNavbar" >
+
+     
+    <!--   <ul class="nav navbar-nav">
+     <li> <a id="usern" style="color: white; float: right;">fds</a></li>
+    </ul> -->
+    <ul class="nav navbar-nav">   
+            
+            <li><a href="group_complaint.html">Register New Complaint</a></li>
+            <li><a href="user_complaint_view.html">View Complaint Status</a></li>
+        
+      </ul>  
+
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a  onclick="getlogout_success();" style="cursor: pointer;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        
+      </ul>
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand" id="usern" style="color: white;  display: inline;float: right;" ></a>
+        </div>
+    </div>
+  </div>
+</nav>
+
+    <center>
+ <div class="form-body">
+
+	<div class="comp-form"  >
+		<div class="comp-form-head">
+			
+			<p id="form-top">Register Your Complaint</p>
+					
+		</div>
+        
+		<form  >
+			<div class="cname">
+				<p id="compname" class="txt_name">Name</p>	
+            </div>
+            <div class="comp-form-name">
+				<input type="text" name="fname" placeholder="Enter Your Name Here..." id="c_fname" required="" class="name" readonly="">
+			</div>
+
+            <div class="cname">
+                <p id="cemail" class="txt_name">Enter Your E-Mail Id</p>
+            </div>
+			<div class="comp-form-name">
+				
+				<input type="email" placeholder="Enter Your E-Mail Id" name="email" id="c_email" required="" class="name" readonly="" >
+			</div>
+            <div class="cname">
+                <p id="comptype" class="txt_name">Enter Complaint Type.</p>
+            </div>
+            <div class="comp-form-name">
+                
+                <!-- <input type="text" placeholder="Enter Complaint Type" name="compdesc" id="ctype" required="" class="name">  -->
+                <select class="name" required="" id="ctype" >
+                  <option value="">--Select--</option>
+                  <option value="hw">Hardware</option>
+                  <option value="sw">Software</option>
+                  <option value="nw">Network</option>
+                  <option value="others">Others</option>
+               </select>
+            </div>
+            <div class="cname">
+                    <p class="txt_name"> Complaint Description :</p>
+            </div>
+			<div class="comp_desc">
+				
+			
+				<textarea rows="7" cols="74" required="" placeholder="Enter Complaint Description..."  id="cdesc" name="comp_desc"></textarea>
+			</div>
+			<div class="reg-form-submission">
+				<center>
+				<input type="submit" value="SUBMIT"  id="submit" class="btnsubmit" onclick="xyz()">
+                 <input type="submit" value="BACK"  id="submit" class="btnsubmit" onclick="window.location.href='user_view.html'">
+				</center>
+			</div>
+
+		 </form>
+	
+</div>
+</div>
+</center>
+</body>
+</html>
+<!-- ,function(){
+                        tx.executeSql('Select max(ID) from CompTable;',[],function(tx,results){
+                            var gname = window.sessionStorage.getItem('gname');
+                            var id = results.rows.item(0).ID;
+                            var compname = gname + '/' + id;
+                            tx.executeSql('UPDATE CompTable SET compNum = compname WHERE ID=id;',[],function(){
+                                alert("Your Complaint is Registered.\n\nComplaint number: "+compname+"\n\nKindly note the complaint number for future reference.");
+                            });
+                        });
+                        
+                    } -->
+
+
+<!-- ,compNum VARCHAR2(50), compStatus VARCHAR2(20) DEFAULT "Under Review" -->

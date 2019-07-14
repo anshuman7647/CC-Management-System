@@ -1,0 +1,152 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<title>Complaint Management</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+   <script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body onload="a()" onunload="window.sessionStorage.removeItem('Complaint_num')">
+  
+
+
+<script type="text/javascript">
+
+	document.addEventListener("deviceready", function(){ 
+                db = window.openDatabase("UserDb", "1.0", "Cordova Demo", 200000);
+                var Num=window.sessionStorage.getItem("Complaint_num");
+                var len=0;
+                db.transaction(function(tx){
+                	
+                	tx.executeSql('Select * from CompTable where compNum ="'+Num+'"',[],function(tx,results){
+                	len = results.rows.length;
+                	document.getElementById('name').innerHTML = results.rows[0].firstname;
+                  document.getElementById('id').innerHTML = results.rows[0].email;
+                  document.getElementById('type').innerHTML = results.rows[0].complaint_type;
+                  document.getElementById('cdesc').innerHTML = results.rows[0].complaintdescp;
+                  document.getElementById('num').innerHTML = results.rows[0].compNum;
+                	});
+                },function(error){
+                	alert('Transaction ERROR: ' + error.message);
+                });
+                console.log(len);
+            }, false);
+	
+function seen(obj){
+    db.transaction(function(tx) {
+          var Num=window.sessionStorage.getItem("Complaint_num");
+          tx.executeSql('UPDATE CompTable SET compStatus = "'+obj+'" where compNum="'+Num+'";');                
+      }, function(error) {
+          alert('Transaction ERROR: ' + error.message);
+      }, function() {
+          alert("Status Updated");
+      });
+}
+  // function getlogout_success(){
+  //     window.sessionStorage.removeItem("loggedIn");
+  //     window.sessionStorage.removeItem("firstname");
+  //     window.sessionStorage.removeItem("username");
+
+  //     location.replace("index.html");
+      
+  //   }
+	
+</script>
+
+<nav class="navbar navbar-inverse" style="margin-bottom: 0px;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <div class="navbar-toggle collapsed " style="margin: 0px 0px 0px 0px; padding: 0px 0px 0px 0px; border: none;">
+        <div>
+         <a class="navbar-brand" id="usernn" style="color: white;  display: inline; float: right;  " ></a>  
+       </div>
+      </div>
+      
+      <a class="navbar-brand" href="amc_complaint_view.html">ADRDE</a>
+     </div>
+    
+    <div class="collapse navbar-collapse" id="myNavbar" >
+
+    
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a  onclick="getlogout_success();" style="cursor: pointer;"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        
+      </ul>
+        <div class="collapse navbar-collapse">
+            <a class="navbar-brand" id="usern" style="color: white;  display: inline;float: right;" ></a>
+        </div>
+    </div>
+  </div>
+</nav>
+
+
+<br>
+<br>
+ <center>
+   	<h1>Complaint Management </h1>
+   </center>
+   <br>
+   
+<div style="margin: 0px 10px 0px 10px; ">
+
+   
+   <table  class="table table-striped">
+     <tr>
+       <th >Employee Name</th>
+       <td id="name">--</td>
+     </tr>
+     <tr>
+       <th>Employee ID</th>
+       <td id="id">--</td>
+     </tr>
+     <tr>
+       <th>Complaint Number</th>
+       <td id="num">--</td>
+     </tr>
+     <tr>
+       <th>Complaint Type</th>
+       <td id="type">--</td>
+     </tr>
+     <tr>
+       <th>Complaint Description</th>
+       <td id="cdesc">--</td>
+     </tr>
+     <tr>
+       <th>Complaint Status</th>
+       <td>
+        <input type="radio" id="compstatus" name="compStatus" value="seen" onclick="seen(this.value)"> Seen<br>
+        <input type="radio" id="compStatus" name="compStatus" value="attended" onclick="seen(this.value)"> Attended
+      </td>
+     </tr>
+   </table>
+   <center>
+<input type="submit" value="BACK" onclick="window.location = 'amc_complaint_view.html'" class="btnsubmit">
+     
+   </center>
+      </div>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<script type="text/javascript" src="js/cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="js/reg.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<script type="text/javascript">
+
+            var db = null, ID=0;
+            
+            document.addEventListener( "deviceready", function(){ 
+                db = window.openDatabase("UserDb", "1.0", "Cordova Demo", 200000);
+                //db = window.sqlitePlugin.openDatabase({name: 'UserDb', location: 'default'});
+                // alert("db opened");
+                //default: Library/LocalDatabase subdirectory - NOT visible to iTunes and NOT backed up by iCloud
+                //Library: Library backed up by iCloud, NOT visible to iTunes
+                //Documents: Documents visible to iTunes and backed up by iCloud
+
+
+                //For upgrade logic please check my existing video from below url
+                //http://infologs.in/ or http://youtube.com/webboostings/
+                db.transaction(function(tx) {
+                     tx.executeSql('CREATE TABLE IF NOT EXISTS RegTable (firstname VARCHAR2(30), lastname VARCHAR2(30), gname VARCHAR2(20), email VARCHAR2(50), paswrd VARCHAR2(30),role VARCHAR2(20), PRIMARY KEY(email))');  
+                     // tx.executeSql('DROP TABLE RegTable') ;             
+                }, function(error) {
+                    alert('Transaction ERROR: ' + error.message);
+                }, function() {
+                    alert("Database has been generated successfully.");
+                });
+            }, false);
+
+            function abc(){
+                RegNow();
+            }
+            function RegNow()
+            {
+                 var firstname = document.getElementById("fname").value;
+                var lastname = document.getElementById("lname").value;
+                var email = document.getElementById("email").value;
+                var gname = document.getElementById("gname").value;
+                var paswrd = document.getElementById("passw").value;
+                var cpaswrd = document.getElementById("cpassw").value;
+                var role = document.getElementById("userrole").value;
+
+                if(paswrd==cpaswrd && paswrd!=""){
+
+                 
+                var params = [firstname, lastname, gname, email, paswrd,role];
+                var strQuery = 'INSERT INTO RegTable VALUES (?,?,?,?,?,?)';
+                // var strQuery ="DROP TABLE RegTable";
+                
+                 db.transaction(
+                    function (tx) {
+                    tx.executeSql(strQuery,params);
+                     window.location= "index.html";
+                }, function(error) {
+                    alert('Transaction ERROR: ' + error.message);
+                
+                }, 
+               
+                function(){
+                    
+                    alert("User Registered successfully.\n Use your email as your username");
+                    window.location= "index.html";
+                   // return false; 
+                });
+             
+            
+             }
+ 
+             else{
+                alert('Please enter a valid password');
+                 document.getElementById("passw").style.border = "2px solid #FB6B6B" ;
+                 document.getElementById("cpassw").style.border = "2px solid #FB6B6B" ;
+             }
+
+
+            }
+            
+</script>
+
+<body style="margin:0px 0px 0px 0px; ">
+    <center>
+ <div class="form-body">
+
+	<div class="comp-form">
+		<div class="comp-form-head">
+			<center>
+			<p id="form-top">Register Yourself</p>
+			</center>			
+		</div>
+        
+		<form onsubmit="abc()">
+			<div class="cname" >
+				<p class="txt_name">First Name</p>	
+            </div>
+            <div class="comp-form-name">
+				<input type="text" name="fname" placeholder="Enter Your First Name Here..." id="fname" class="name" required="" >
+			</div>
+			<div class="cname">
+				<p class="txt_name">Last Name</p>
+            </div>
+            <div class="comp-form-name">
+				<input type="text" name="lname" placeholder="Enter Your Last Name Here..." id="lname" class="name" required="" >
+			</div>
+            <div class="cname" >
+                <p class="txt_name">User Type</p>
+            </div>
+             <div class="comp-form-name">
+                
+                <!-- <input type="text" placeholder="Enter Complaint Type" name="compdesc" id="duration" class="name" required="">  -->
+               
+                    <select  id="userrole" class="selectname" required="">
+                    <option value="">--Select User Type--</option>
+                    <option value="AMC">AMC Eng.</option>
+                    <option value="naive">Naive User</option>               
+                </select>
+            </div>
+			<div class="cname" >
+				<p class="txt_name">Enter Your Group Name</p>
+            </div>
+            <div class="comp-form-name">
+				<input type="text" name="groupname" id="gname" class="name" placeholder="Ex: ADRDE/MISG/CC..." required="">
+			</div>
+			<div class="cname">
+				<p class="txt_name">Enter Your E-Mail Id</p>
+            </div>
+            <div class="comp-form-name">
+				<input type="email" placeholder="Ex: abc@xyz.com " name="email" id="email" class="name" required="">
+			</div>
+			<div class="cname">
+				<p class="txt_name">Enter The Password</p>
+            </div>
+            <div class="comp-form-name">
+				<input type="password" placeholder="Enter The Password (atleast 8 characters) " name="passw" id="passw" class="name" onkeyup="validate_p()" required=""  >
+                 <span class="span-name">
+                   
+                 </span>
+             </div>
+			<div class="cname">
+				<p class="txt_name">Confirm Password</p>
+            </div>
+            <div class="comp-form-name">
+				<input type="password" placeholder="Enter The Same Password "name="cpassw" id="cpassw" required="" class="name" onkeyup="validate_cp()">
+			</div>
+       
+			<div class="reg-form-submission">
+				<center>
+				<input type="submit" value="SUBMIT"  id="submit" class="btnsubmit">
+				</center>
+			</div>
+</form>
+		
+	</div>
+</div>
+</div>
+</center>
+
+</body>
+</html>

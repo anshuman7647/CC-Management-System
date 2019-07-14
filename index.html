@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <script type="text/javascript" src="js/cordova.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/SQLitePlugin.js"></script>
+        <!-- <script type="text/javascript" charset="utf-8" src="js/login.js"></script> -->
+    </head>
+    <script type="text/javascript">
+  history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        window.history.go(1);
+    };
+
+             var db = null, ID=0;
+            
+            document.addEventListener("deviceready", function(){ 
+                db = window.openDatabase("UserDb", "1.0", "Cordova Demo", 200000);
+                               
+                 db.transaction(function(tx) {
+                    
+                    // tx.executeSql('select email, paswrd from RegTable');                    
+                }, function(error) {
+                    alert('Transaction ERROR: ' + error.message);
+                }, function() {
+                    console.log("Database Connected");
+
+
+                });
+
+                
+            }, false);
+
+
+function getlogin_success(){
+  document.addEventListener("deviceready", function(){
+    var status=0;
+
+    db.transaction(function(transaction) {
+      transaction.executeSql('SELECT * FROM RegTable', [], function (tx, results) {
+       var len = results.rows.length;
+     
+     console.log("RegTable: " + len + " rows found.");
+      
+     for (var i=0; i< len; i++) {  
+      var employee =results.rows.item(i);
+      var username =document.getElementById("username").value;
+      var password =document.getElementById("psw").value;
+      var uname    =employee.email;
+      var fname    =employee.firstname;
+      var pasw     =employee.paswrd;
+      var gname    =employee.gname;
+      var lname    =employee.lastname;
+      var role     =employee.role;
+      //var fn=employee.firstname;
+      //alert(username);
+      //alert(password);
+      
+
+        if(username==uname && password==pasw){
+          alert('password match');
+          if(role=="AMC"){
+            alert("Login Success");
+            
+            window.sessionStorage.setItem("loggedIn", 1);
+            window.sessionStorage.setItem("username", document.getElementById("username").value);
+            window.location= 'amc_complaint_view.html';
+            window.sessionStorage.setItem("firstname", fname);
+            window.sessionStorage.setItem("lastname",lname);
+            window.sessionStorage.setItem("gname",gname);
+            //window.localStorage.setItem("firstname", fn);
+            // window.location= 'home.html';
+            status=1;
+            break;
+          }
+          else if(role == 'naive'){
+            alert("Login Success");
+             
+            window.sessionStorage.setItem("loggedIn", 1);
+            window.sessionStorage.setItem("username", document.getElementById("username").value);
+            window.location= 'user_view.html';
+            window.sessionStorage.setItem("firstname", fname);
+            window.sessionStorage.setItem("lastname",lname);
+            window.sessionStorage.setItem("gname",gname);
+            //window.localStorage.setItem("firstname", fn);
+         
+            status=1;
+            break;
+          }
+        }
+        else if (username=="admin" && password=="123456789") {
+           window.location= 'home.html';
+           window.sessionStorage.setItem("firstname", "John");
+           window.sessionStorage.setItem("lastname", "Doe");
+           window.sessionStorage.setItem("loggedIn", 1);
+          window.sessionStorage.setItem("username", document.getElementById("username").value);
+          // window.sessionStorage.setItem("lastname",lname);
+          window.sessionStorage.setItem("gname",gname);
+          status=1;
+          break;
+        }       
+      }
+      
+     if(status!=1)
+      {
+        var err = document.querySelector('.err');
+        err.style.display = 'block';
+        err.innerHTML = "Please enter valid username and password";
+        document.getElementById("psw").value = "";
+         //alert("login failed");
+      }
+
+
+     });
+  });
+
+  },false);
+}
+
+
+function remove_err(){
+  var err = document.querySelector('.err');
+        err.style.display = 'none';
+}
+
+     </script>
+
+    <body style="margin:0px 00px 0px 0px;  " >
+        <script type="text/javascript" src="cordova.js"></script>
+
+
+         <div class="login-body">
+         </div>
+                 <!-- <img src="D:\Users\Deeksha\Desktop\Home\www\img\bg1.png" id="bgimage"> -->
+  
+    
+   <div class = "login-form">
+      <div class="logo-body">
+           
+         </div>
+    <div id="login-login-head">
+        <p>CCMS Login</p>
+    </div>
+    <div class="login-login-box">
+    <div class="login-login-username">
+        <p id="text">User Name</p>
+    </div>   
+    <div class="login-login-input">
+        <input type="text" name="username" placeholder="Ex: abc@xyz.com" id="username" >
+
+    </div>
+     <div class="login-login-password">
+        <p id="text">Password</p>
+    </div>   
+    <div class="login-login-input">
+        <input type="password" name="password" id="psw" onclick="remove_err()">
+    </div>
+    <div class="err">
+      <p id="err-msg"></p>
+    </div>
+   <center>
+        <div id="login-login-submit">
+        <input type="submit" name="submit" value="Submit" id="submit" class="btnsubmitlogin
+        " onclick="getlogin_success();">
+    </div>
+         <div id="register">
+        <a href="reg.html" id="reg" style="color: white">Register Yourself</a>
+    </div>
+  </center>
+   </div>
+   </div>
+
+    </body>
+</html>
